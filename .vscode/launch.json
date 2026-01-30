@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-RestfullApplication<restfull>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "es.etg.daw.dawes.java.rest.restfull.RestfullApplication",
+            "projectName": "restfull",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

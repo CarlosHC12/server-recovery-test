@@ -17,11 +17,11 @@ public class ProductoJpaRepositoryImpl implements ProductoRepository{
     private final ProductoEntityJpaRepository repository;
 
     @Override
-    public Producto save(Producto t) {
-
-        ProductoEntity prod = ProductoMapper.toEntity(t);
-        return ProductoMapper.toDomain(repository.save(prod));
-    }
+public Producto save(Producto t) {
+    ProductoEntity prod = ProductoMapper.toEntity(t);
+    ProductoEntity savedEntity = repository.save(prod); // savedEntity tiene el ID generado
+    return ProductoMapper.toDomain(savedEntity); // Debe mapear el ID
+}
 
     @Override
     public List<Producto> getAll() {

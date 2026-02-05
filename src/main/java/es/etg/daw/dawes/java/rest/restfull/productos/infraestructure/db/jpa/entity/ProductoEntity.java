@@ -3,6 +3,9 @@ package es.etg.daw.dawes.java.rest.restfull.productos.infraestructure.db.jpa.ent
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import es.etg.daw.dawes.java.rest.restfull.productos.domain.model.CategoriaId;
+import es.etg.daw.dawes.java.rest.restfull.productos.domain.model.Producto;
+import es.etg.daw.dawes.java.rest.restfull.productos.domain.model.ProductoId;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,7 +28,7 @@ import lombok.Data;
 public class ProductoEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "nombre", nullable = false, length = 255)
@@ -63,12 +66,14 @@ public class ProductoEntity {
     }
 
     // Constructor con campos (simplificado)
-    public ProductoEntity(Integer id, String nombre, BigDecimal precio, LocalDateTime fechaCreacion, CategoriaEntity categoria) {
-        this.id = id;
-        this.nombre = nombre;
-        this.precio = precio;
-        this.fechaCreacion = fechaCreacion;
-        this.categoria = categoria;
-    }
+    public static Producto toDomain(ProductoEntity e) {
+    return Producto.builder()
+            .id(e.getId() != null ? new ProductoId(e.getId()) : null)
+            .nombre(e.getNombre())
+            .precio(e.getPrecio().doubleValue())
+            .createdAt(e.getFechaCreacion())
+            .categoria(new CategoriaId(e.getCategoria().getId()))
+            .build();
+}
     
 }

@@ -1,6 +1,7 @@
 package es.etg.daw.dawes.java.rest.restfull.productos.infraestructure.mapper;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,19 +19,16 @@ import es.etg.daw.dawes.java.rest.restfull.productos.infraestructure.web.dto.Pro
 public class ProductoMapper {
 
     public static ProductoEntity toEntity(Producto p){
+    CategoriaEntity cat = new CategoriaEntity();
+    cat.setId(p.getCategoria().getValue());
 
-        // Defino la categoría
-        CategoriaEntity cat = new CategoriaEntity();
-        cat.setId(p.getCategoria().getValue());
-        ProductoId id = p.getId();
-        return ProductoEntity.builder().id(id!=null?id.getValue():null)
-                                        .nombre(p.getNombre())
-                                       .precio(new BigDecimal(p.getPrecio()))
-                                       .fechaCreacion(p.getCreatedAt())
-                                       .categoria(cat)
-                                       .build();
-
-    }
+    return ProductoEntity.builder()
+            .nombre(p.getNombre())
+            .precio(BigDecimal.valueOf(p.getPrecio()))
+            .fechaCreacion(p.getCreatedAt() != null ? p.getCreatedAt() : LocalDateTime.now())
+            .categoria(cat)
+            .build(); // No pases ID
+}
 
     public static CreateProductoCommand toCommand(ProductoRequest req){
         return new CreateProductoCommand(req.nombre(), req.precio(), new CategoriaId(req.categoriaId()));
@@ -44,15 +42,19 @@ public class ProductoMapper {
         return new ProductoResponse(p.getId().getValue(), p.getNombre(), p.getPrecio(), p.getCreatedAt(), p.getCategoria().getValue());
     }
 
-    public static Producto toDomain(ProductoEntity p){
-        return Producto.builder().id(new ProductoId(p.getId()))
-                                 .nombre(p.getNombre())
-                                 .precio(p.getPrecio().doubleValue())
-                                 .createdAt(p.getFechaCreacion())
-                                 .categoria(new CategoriaId(p.getCategoria().getId()))
-                                 .build();
-
+    public static Producto toDomain(ProductoEntity p) {
+    // Asegúrate de que p.getId() no sea null
+    if (p.getId() == null) {
+        throw new IllegalStateException("El ID de la entidad no puede ser nulo");
     }
+    return Producto.builder()
+            .id(new ProductoId(p.getId())) // Esto es clave
+            .nombre(p.getNombre())
+            .precio(p.getPrecio().doubleValue())
+            .createdAt(p.getFechaCreacion())
+            .categoria(new CategoriaId(p.getCategoria().getId()))
+            .build();
+}
 
     public static List<Producto> toDomain(List<ProductoEntity> lista){
         List<Producto> lp = new ArrayList<>();

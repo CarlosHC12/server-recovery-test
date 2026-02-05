@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>es.etg.daw.dawes.java.rest</groupId>
-	<artifactId>restfull</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>restfull</name>
+	<artifactId>restful</artifactId>
+	<version>1.0.0</version>
+	<name>restful</name>
 	<description>Ejemplo de restfull</description>
 	<url/>
 	<licenses>
